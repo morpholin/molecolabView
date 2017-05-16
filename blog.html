@@ -1,0 +1,53 @@
+<form>
+<button id="post_stuff">POST</button>
+<p> Name: <input id="name"> </p>
+<p> City: <input id="city"> </p>
+</form>
+<button id="get_stuff">GET</button>
+<button id="jsonget_stuff">JSON</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+// GET PLAIN TEXT from page ajax_data
+$(document).ready(function() {       
+    $("#get_stuff").click(function(){
+      $.get("ajax_data", function(data) {
+          console.log(data);
+       });
+    });
+});
+// GET JSON from page ajax_data
+$(document).ready(function() {       
+    $("#jsonget_stuff").click(function(){
+      $.getJSON("ajax_data", function(data) {
+          console.log(JSON.stringify(data));
+          extract(data);
+          console.log(window['INFO']);
+          console.log(window['atoms']);
+       });
+
+    });
+});
+// SEND JSON format to page ajax_data
+$(document).ready(function() {       
+    $("#post_stuff").click(function(){
+      $.post("ajax_data",
+      {
+        name : document.getElementById('name').value,
+        city : document.getElementById('city').value,
+        csrfmiddlewaretoken : '{{ csrf_token }}',
+      },        
+         function(data,status) {
+         // console.log(data);
+       });
+    });
+});
+
+function extract(variable) {
+    for (var key in variable) {
+        window[key] = variable[key];
+    }
+}
+
+</script>
+
